@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ATOM x KSE Ignite | AntimatterAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+:root{
+  --tx:clamp(.75rem,.7rem+.25vw,.875rem);
+  --ts:clamp(.875rem,.8rem+.35vw,1rem);
+  --tb:clamp(1rem,.95rem+.25vw,1.125rem);
+  --tl:clamp(1.125rem,1rem+.75vw,1.5rem);
+  --txl:clamp(1.5rem,1.2rem+1.25vw,2.25rem);
+  --t2:clamp(2rem,1.2rem+2.5vw,3.5rem);
+  --t3:clamp(2.5rem,1rem+4vw,5rem);
+  --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.25rem;
+  --s6:1.5rem;--s8:2rem;--s10:2.5rem;--s12:3rem;--s16:4rem;--s20:5rem;--s24:6rem;
+  --r:9999px;--rmd:.5rem;--rlg:.75rem;--rxl:1rem;--r2:1.5rem;
+  --e:cubic-bezier(.16,1,.3,1);
+  --fd:Syne,Helvetica Neue,sans-serif;
+  --fb:Inter,system-ui,sans-serif;
+  --w:1100px;--ww:1300px;
+  --bg:#060709;--sf:#0b0d10;--s2c:#101318;--off:#161a20;--dyn:#1c2028;
+  --dv:#1e2330;--bo:#252c38;
+  --tx:#dde2ef;--mu:#6e7d96;--fa:#3a4256;--inv:#060709;
+  --p:#00d4c8;--ph:#1ffff1;--phl:#0b2826;
+  --gd:#f5c842;--bl:#3b82f6;--pu:#8b5cf6;--gr:#22c55e;
+  --glow:0 0 60px rgba(0,212,200,.14);
+  --glow2:0 0 30px rgba(0,212,200,.10);
+  --glgd:0 0 40px rgba(245,200,66,.10);
+  --sh:0 8px 32px rgba(0,0,0,.6);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-font-smoothing:antialiased;}
+body{font-family:var(--fb);font-size:var(--tb);color:var(--tx);background:var(--bg);min-height:100dvh;line-height:1.6;overflow-x:hidden;}
+img,video{display:block;max-width:100%;height:auto;}
+ul[role=list]{list-style:none;}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4,h5,h6{font-family:var(--fd);line-height:1.12;text-wrap:balance;}
+p,li{text-wrap:pretty;max-width:72ch;}
+::selection{background:rgba(0,212,200,.2);}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bo);border-radius:var(--r);}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:var(--s4) var(--s8);
+  background:rgba(6,7,9,.6);
+  backdrop-filter:blur(30px) saturate(200%);
+  -webkit-backdrop-filter:blur(30px) saturate(200%);
+  border-bottom:1px solid rgba(255,255,255,.04);
+  transition:background .3s var(--e),border-color .3s;
+}
+.nav.sc{background:rgba(6,7,9,.9);border-color:var(--dv);}
+.nav-logo{display:flex;align-items:center;gap:var(--s3);font-family:var(--fd);font-weight:700;font-size:var(--ts);letter-spacing:-.025em;}
+.lm{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--p),var(--pu));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 20px rgba(0,212,200,.3);flex-shrink:0;
+}
+.nav-links{display:flex;gap:var(--s6);list-style:none;font-size:var(--ts);color:var(--mu);}
+.nav-links a{transition:color .18s var(--e);}
+.nav-links a:hover,.nav-links a.ac{color:var(--p);}
+.nbtn{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  padding:var(--s2) var(--s5);
+  background:linear-gradient(135deg,var(--p),#0099cc);
+  color:#000;border-radius:var(--r);
+  font-size:var(--ts);font-weight:700;font-family:var(--fd);
+  transition:all .22s var(--e);box-shadow:0 0 20px rgba(0,212,200,.2);
+}
+.nbtn:hover{transform:translateY(-1px);box-shadow:0 0 32px rgba(0,212,200,.35);}
+
+/* HERO */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;padding:var(--s24) var(--s8) var(--s16);
+}
+.hbg{position:absolute;inset:0;z-index:0;}
+.hbg img{width:100%;height:100%;object-fit:cover;opacity:.26;}
+.hbg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%,rgba(0,212,200,.06) 0%,transparent 60%),
+    linear-gradient(to bottom,rgba(6,7,9,.1) 0%,rgba(6,7,9,.65) 50%,rgba(6,7,9,1) 100%);
+}
+#pc{position:absolute;inset:0;z-index:1;pointer-events:none;}
+.hc{position:relative;z-index:2;max-width:960px;margin:0 auto;text-align:center;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:var(--s3);
+  padding:var(--s2) var(--s5);
+  background:rgba(0,212,200,.07);
+  border:1px solid rgba(0,212,200,.18);
+  border-radius:var(--r);font-size:var(--tx);font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--p);
+  margin-bottom:var(--s8);backdrop-filter:blur(12px);
+}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--p);animation:pls 2.5s ease-in-out infinite;}
+@keyframes pls{0%,100%{box-shadow:0 0 0 0 rgba(0,212,200,.5);}50%{box-shadow:0 0 0 7px rgba(0,212,200,0);}}
+.hero h1{font-size:var(--t3);font-weight:800;letter-spacing:-.042em;line-height:1.0;margin-bottom:var(--s6);}
+.gt{color:transparent;background:linear-gradient(90deg,var(--p),var(--bl));-webkit-background-clip:text;background-clip:text;}
+.gg{color:transparent;background:linear-gradient(90deg,var(--gd),#ffaa00);-webkit-background-clip:text;background-clip:text;}
+.gwh{color:transparent;background:linear-gradient(160deg,var(--tx) 0%,var(--mu) 100%);-webkit-background-clip:text;background-clip:text;}
+.hero-sub{font-size:var(--tl);color:var(--mu);max-width:680px;margin:0 auto var(--s10);line-height:1.65;}
+.hctas{display:flex;align-items:center;justify-content:center;gap:var(--s4);flex-wrap:wrap;}
+.bglow{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  padding:calc(var(--s3)+1px) var(--s10);
+  background:linear-gradient(135deg,var(--p),#0099cc);
+  color:#000;border-radius:var(--r);
+  font-size:var(--ts);font-weight:700;font-family:var(--fd);
+  box-shadow:0 0 32px rgba(0,212,200,.28),0 4px 20px rgba(0,0,0,.5);
+  transition:all .25s var(--e);position:relative;overflow:hidden;
+}
+.bglow::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 60%);opacity:0;transition:opacity .2s;}
+.bglow:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(0,212,200,.38),0 8px 30px rgba(0,0,0,.5);}
+.bglow:hover::before{opacity:1;}
+.bout{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  padding:var(--s3) var(--s8);
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:var(--r);font-size:var(--ts);
+  font-weight:600;font-family:var(--fd);color:var(--mu);
+  backdrop-filter:blur(12px);transition:all .25s var(--e);
+}
+.bout:hover{border-color:var(--p);color:var(--p);box-shadow:var(--glow2);}
+.hbadges{display:flex;align-items:center;justify-content:center;gap:var(--s3);margin-top:var(--s10);flex-wrap:wrap;}
+.hb{
+  display:flex;align-items:center;gap:var(--s2);
+  padding:var(--s2) var(--s4);
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--r);font-size:var(--tx);color:var(--mu);
+  backdrop-filter:blur(8px);
+}
+.hbd{width:6px;height:6px;border-radius:50%;}
+.scue{
+  position:absolute;bottom:var(--s8);left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:var(--s2);
+  color:var(--fa);font-size:var(--tx);z-index:2;
+  animation:flt 3s ease-in-out infinite;
+}
+@keyframes flt{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(-7px);}}
+
+/* STAT STRIP */
+.sstrip{
+  background:linear-gradient(180deg,var(--bg) 0%,var(--sf) 100%);
+  border-bottom:1px solid var(--dv);padding:var(--s8);position:relative;overflow:hidden;
+}
+.sstrip::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 50% 0%,rgba(0,212,200,.04) 0%,transparent 70%);}
+.ssi{max-width:var(--ww);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s8);position:relative;z-index:1;}
+.sc2{
+  text-align:center;padding:var(--s6);border-radius:var(--rxl);
+  border:1px solid transparent;transition:all .3s var(--e);position:relative;overflow:hidden;
+}
+.sc2::before{content:"";position:absolute;inset:0;border-radius:var(--rxl);background:linear-gradient(135deg,rgba(255,255,255,.025) 0%,transparent 60%);}
+.sc2:hover{border-color:rgba(0,212,200,.2);background:rgba(0,212,200,.04);transform:translateY(-2px);}
+.sn{
+  font-size:var(--t2);font-weight:800;font-family:var(--fd);
+  letter-spacing:-.04em;display:block;margin-bottom:var(--s1);
+  background:linear-gradient(135deg,var(--p),var(--bl));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.sn.gold{background:linear-gradient(135deg,var(--gd),#ffaa00);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.sl{font-size:var(--tx);color:var(--mu);letter-spacing:.02em;}
+
+/* SECTIONS */
+section{padding:clamp(var(--s16),8vw,var(--s24)) var(--s8);}
+.wrap{max-width:var(--w);margin:0 auto;}
+.wrapw{max-width:var(--ww);margin:0 auto;}
+.chip{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  color:var(--p);font-size:var(--tx);font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;margin-bottom:var(--s5);
+}
+.chip::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--p);}
+.sh{
+  font-size:var(--t2);font-weight:800;letter-spacing:-.035em;margin-bottom:var(--s4);
+  background:linear-gradient(160deg,var(--tx) 40%,var(--mu) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.ssb{font-size:var(--tb);color:var(--mu);max-width:580px;margin-bottom:var(--s12);}
+.div{border:none;height:1px;background:linear-gradient(90deg,transparent,var(--dv),transparent);}
+
+/* IGNITE */
+#ignite{background:linear-gradient(180deg,var(--bg),var(--sf));}
+.i2c{display:grid;grid-template-columns:1fr 1fr;gap:var(--s8);align-items:start;}
+.gc{
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r2);backdrop-filter:blur(16px);
+  padding:var(--s8);position:relative;overflow:hidden;
+  transition:all .3s var(--e);
+}
+.gc::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,200,.04) 0%,transparent 50%);opacity:0;transition:opacity .3s;}
+.gc:hover::before{opacity:1;}
+.gc:hover{border-color:rgba(0,212,200,.18);box-shadow:var(--glow);}
+.qi{font-size:72px;line-height:1;color:var(--p);opacity:.07;font-family:Georgia,serif;position:absolute;top:-8px;right:var(--s6);pointer-events:none;}
+.qt{font-size:var(--tb);color:var(--tx);font-style:italic;line-height:1.75;margin-bottom:var(--s6);position:relative;z-index:1;}
+.qa{display:flex;align-items:center;gap:var(--s3);position:relative;z-index:1;}
+.qav{width:44px;height:44px;border-radius:var(--r);flex-shrink:0;background:linear-gradient(135deg,var(--p),var(--bl));display:flex;align-items:center;justify-content:center;font-size:var(--tx);font-weight:800;color:#000;}
+.qn{font-weight:700;font-size:var(--ts);}
+.qti{font-size:var(--tx);color:var(--mu);}
+.fl{display:flex;flex-direction:column;gap:var(--s3);}
+.fc{
+  display:flex;align-items:flex-start;gap:var(--s4);
+  padding:var(--s4) var(--s5);
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:var(--rxl);transition:all .25s var(--e);
+}
+.fc:hover{border-color:rgba(0,212,200,.25);background:rgba(0,212,200,.03);transform:translateX(4px);}
+.fi{width:38px;height:38px;border-radius:var(--rmd);background:rgba(0,212,200,.1);display:flex;align-items:center;justify-content:center;color:var(--p);flex-shrink:0;}
+.fc h4{font-size:var(--ts);font-weight:700;margin-bottom:2px;}
+.fc p{font-size:var(--tx);color:var(--mu);max-width:none;}
+
+/* USE CASES */
+#uc{background:var(--sf);}
+.tbar{
+  display:flex;gap:var(--s2);flex-wrap:wrap;margin-bottom:var(--s10);
+  padding:var(--s2);background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.05);border-radius:var(--r2);width:fit-content;
+}
+.tb{padding:var(--s2) var(--s5);border-radius:var(--rxl);font-size:var(--ts);font-weight:600;font-family:var(--fd);color:var(--mu);transition:all .2s var(--e);}
+.tb.on{background:linear-gradient(135deg,var(--phl),rgba(0,153,204,.1));color:var(--p);box-shadow:0 0 16px rgba(0,212,200,.1);}
+.tb:hover:not(.on){color:var(--tx);background:rgba(255,255,255,.04);}
+.tp{display:none;}
+.tp.on{display:grid;grid-template-columns:1fr 1fr;gap:var(--s8);align-items:start;}
+.tcc h3{font-size:var(--txl);font-weight:800;letter-spacing:-.025em;margin-bottom:var(--s4);background:linear-gradient(135deg,var(--tx) 0%,var(--mu) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.tcc>p{color:var(--mu);margin-bottom:var(--s6);font-size:var(--ts);}
+.ucs{display:flex;flex-direction:column;gap:var(--s3);}
+.uu{
+  display:flex;align-items:flex-start;gap:var(--s4);
+  padding:var(--s4) var(--s5);
+  background:rgba(255,255,255,.018);
+  border:1px solid rgba(255,255,255,.045);
+  border-radius:var(--rxl);transition:all .25s var(--e);
+}
+.uu:hover{border-color:rgba(0,212,200,.2);background:rgba(0,212,200,.025);}
+.un{width:26px;height:26px;border-radius:var(--r);background:rgba(0,212,200,.1);color:var(--p);display:flex;align-items:center;justify-content:center;font-size:var(--tx);font-weight:800;flex-shrink:0;}
+.uu h5{font-size:var(--ts);font-weight:700;margin-bottom:2px;}
+.uu p{font-size:var(--tx);color:var(--mu);max-width:none;}
+.flow{
+  background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r2);padding:var(--s6);
+  display:flex;flex-direction:column;gap:var(--s2);
+  position:relative;overflow:hidden;
+}
+.flow::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(0,212,200,.04) 0%,transparent 70%);}
+.fn{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--rlg);font-size:var(--tx);font-weight:600;position:relative;z-index:1;transition:border-color .2s;}
+.fn.a{border-color:rgba(0,212,200,.25);}
+.fn.i{border-color:rgba(245,200,66,.2);}
+.fn.k{border-color:rgba(59,130,246,.2);}
+.fn.g{border-color:rgba(34,197,94,.2);}
+.fd2{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.fa2{padding-left:var(--s6);font-size:10px;color:var(--fa);display:flex;align-items:center;}
+.fa2::before{content:"↓ ";white-space:pre;}
+
+/* CAPABILITIES */
+#cap{background:linear-gradient(180deg,var(--bg),var(--sf) 80%);}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);}
+.cc{
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.055);
+  border-radius:var(--r2);padding:1.75rem;transition:all .3s var(--e);
+  position:relative;overflow:hidden;cursor:default;
+}
+.cc::after{content:"";position:absolute;inset:0;border-radius:var(--r2);background:linear-gradient(135deg,rgba(0,212,200,.05) 0%,transparent 50%);opacity:0;transition:opacity .3s;}
+.cc:hover{border-color:rgba(0,212,200,.3);transform:translateY(-3px);box-shadow:var(--glow);}
+.cc:hover::after{opacity:1;}
+.ci{width:46px;height:46px;border-radius:var(--rlg);display:flex;align-items:center;justify-content:center;margin-bottom:var(--s5);color:var(--p);background:rgba(0,212,200,.1);position:relative;z-index:1;}
+.cc h4{font-size:var(--ts);font-weight:700;margin-bottom:var(--s2);position:relative;z-index:1;}
+.cc p{font-size:var(--tx);color:var(--mu);max-width:none;line-height:1.65;position:relative;z-index:1;}
+.cp{display:inline-flex;margin-top:var(--s4);padding:2px var(--s3);background:rgba(255,255,255,.05);border-radius:var(--r);font-size:10px;color:var(--fa);font-weight:600;letter-spacing:.04em;text-transform:uppercase;position:relative;z-index:1;}
+
+/* INTEGRATION */
+#integ{background:var(--sf);}
+.iarch{display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr;gap:var(--s4);align-items:center;margin-bottom:var(--s12);}
+.ab{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:var(--r2);padding:var(--s6);text-align:center;transition:all .3s var(--e);}
+.ab:hover{transform:translateY(-2px);}
+.ab.ac2{border-color:rgba(0,212,200,.35);background:rgba(0,212,200,.05);box-shadow:var(--glow);}
+.aico{width:56px;height:56px;border-radius:var(--rxl);margin:0 auto var(--s4);display:flex;align-items:center;justify-content:center;font-size:26px;}
+.ab h4{font-size:var(--ts);font-weight:700;margin-bottom:var(--s2);}
+.ab p{font-size:var(--tx);color:var(--mu);max-width:none;}
+.aar{display:flex;flex-direction:column;align-items:center;gap:var(--s1);font-size:10px;color:var(--fa);text-align:center;}
+.ifeats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s4);}
+.iff{background:rgba(255,255,255,.018);border:1px solid rgba(255,255,255,.045);border-radius:var(--rxl);padding:var(--s5);transition:border-color .2s;}
+.iff:hover{border-color:rgba(0,212,200,.15);}
+.ifl{font-size:10px;color:var(--p);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:var(--s3);display:flex;align-items:center;gap:var(--s2);}
+.iff ul{display:flex;flex-direction:column;gap:var(--s2);}
+.iff li{font-size:var(--tx);color:var(--mu);display:flex;align-items:flex-start;gap:var(--s2);}
+.iff li::before{content:"→";color:var(--p);flex-shrink:0;font-weight:700;}
+
+/* SCENARIO */
+#scenario{background:var(--bg);}
+.ss{
+  background:linear-gradient(135deg,rgba(0,212,200,.055) 0%,rgba(139,92,246,.04) 100%);
+  border:1px solid rgba(0,212,200,.14);border-radius:var(--r2);padding:var(--s10);
+  position:relative;overflow:hidden;
+}
+.ss::before{content:"";position:absolute;top:-80px;right:-80px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,200,.06) 0%,transparent 70%);pointer-events:none;}
+.sch{display:flex;align-items:center;gap:var(--s4);margin-bottom:var(--s8);flex-wrap:wrap;}
+.sct{padding:var(--s2) var(--s5);background:rgba(0,212,200,.1);border:1px solid rgba(0,212,200,.22);border-radius:var(--r);color:var(--p);font-size:var(--tx);font-weight:700;}
+.stl{display:flex;gap:var(--s4);overflow-x:auto;padding-bottom:var(--s4);scrollbar-width:thin;scrollbar-color:var(--bo) transparent;}
+.sstep{
+  flex:0 0 220px;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.06);border-radius:var(--rxl);padding:var(--s5);
+  position:relative;overflow:hidden;transition:all .25s var(--e);
+}
+.sstep:hover{border-color:rgba(0,212,200,.22);transform:translateY(-2px);}
+.sstep::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--p),var(--bl));opacity:0;transition:opacity .2s;}
+.sstep:hover::before{opacity:1;}
+.stim{font-size:var(--tx);color:var(--p);font-weight:700;margin-bottom:var(--s3);letter-spacing:.04em;}
+.sbd{font-size:var(--tx);color:var(--mu);line-height:1.55;}
+.sbd strong{color:var(--tx);display:block;margin-bottom:2px;font-size:.82rem;}
+.sbdg{display:inline-flex;margin-top:var(--s3);padding:2px var(--s2);border-radius:var(--r);font-size:10px;font-weight:700;}
+.ba{background:rgba(0,212,200,.12);color:var(--p);}
+.bi{background:rgba(245,200,66,.12);color:var(--gd);}
+.bk{background:rgba(59,130,246,.12);color:var(--bl);}
+
+/* OUTCOMES */
+#outcomes{background:var(--sf);}
+.og{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s5);}
+.oc{
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r2);padding:var(--s8);text-align:center;
+  transition:all .3s var(--e);position:relative;overflow:hidden;
+}
+.oc::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(245,200,66,.04) 0%,transparent 70%);opacity:0;transition:opacity .3s;}
+.oc:hover{border-color:rgba(245,200,66,.28);transform:translateY(-4px);box-shadow:var(--glgd);}
+.oc:hover::after{opacity:1;}
+.on2{font-size:var(--t2);font-weight:800;font-family:var(--fd);letter-spacing:-.04em;display:block;margin-bottom:var(--s3);background:linear-gradient(135deg,var(--gd),#ffaa00);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.od{font-size:var(--tx);color:var(--mu);max-width:none;line-height:1.65;}
+
+/* ATOM LINKS */
+#alinks{background:var(--bg);}
+.alg{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s5);}
+.al{
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r2);padding:var(--s6);display:flex;flex-direction:column;gap:var(--s4);
+  transition:all .3s var(--e);position:relative;overflow:hidden;
+}
+.al::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,200,.04) 0%,transparent 50%);opacity:0;transition:opacity .3s;}
+.al:hover{border-color:rgba(0,212,200,.28);transform:translateY(-3px);box-shadow:var(--glow);}
+.al:hover::before{opacity:1;}
+.alh{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
+.alico{width:42px;height:42px;border-radius:var(--rlg);background:rgba(0,212,200,.1);display:flex;align-items:center;justify-content:center;color:var(--p);}
+.alarr{color:var(--fa);transition:all .2s var(--e);}
+.al:hover .alarr{color:var(--p);transform:translate(3px,-3px);}
+.alt2{display:inline-flex;padding:2px var(--s3);background:rgba(255,255,255,.05);border-radius:var(--r);font-size:10px;color:var(--fa);font-weight:700;letter-spacing:.05em;text-transform:uppercase;position:relative;z-index:1;}
+.ati{font-size:var(--tb);font-weight:700;position:relative;z-index:1;}
+.ade{font-size:var(--tx);color:var(--mu);max-width:none;position:relative;z-index:1;}
+
+/* CTA */
+.ctaw{
+  padding:clamp(var(--s16),8vw,var(--s24)) var(--s8);text-align:center;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(0,212,200,.055) 0%,transparent 70%),var(--bg);
+  position:relative;overflow:hidden;
+}
+.ctaw::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 40% 30% at 20% 80%,rgba(139,92,246,.04) 0%,transparent 60%),radial-gradient(ellipse 40% 30% at 80% 20%,rgba(59,130,246,.04) 0%,transparent 60%);}
+.ctai{position:relative;z-index:1;max-width:640px;margin:0 auto;}
+.ctaw h2{font-size:var(--t2);font-weight:800;letter-spacing:-.04em;margin-bottom:var(--s4);background:linear-gradient(160deg,var(--tx) 0%,var(--mu) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.ctaw p{color:var(--mu);margin-bottom:var(--s8);}
+.ctabs{display:flex;gap:var(--s4);justify-content:center;flex-wrap:wrap;}
+
+footer{background:var(--sf);border-top:1px solid var(--dv);padding:var(--s8);text-align:center;color:var(--fa);font-size:var(--tx);}
+footer a{color:var(--p);transition:color .15s;}
+footer a:hover{color:var(--ph);}
+
+.rv{opacity:1;}
+@supports(animation-timeline:scroll()){
+  .rv{opacity:0;animation:rfv linear both;animation-timeline:view();animation-range:entry 0% entry 55%;}
+}
+@keyframes rfv{to{opacity:1;}}
+
+@media(max-width:960px){
+  .i2c,.tp.on,.cg,.og,.alg{grid-template-columns:1fr;}
+  .iarch{grid-template-columns:1fr;}
+  .aar{display:none;}
+  .ifeats{grid-template-columns:1fr 1fr;}
+  .ssi{grid-template-columns:repeat(2,1fr);}
+  .nav-links{display:none;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:clamp(1.9rem,7vw,2.8rem);}
+  .ifeats{grid-template-columns:1fr;}
+  .hctas{flex-direction:column;align-items:center;}
+  .hbadges{display:none;}
+  .tbar{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-logo">
+    <div class="lm">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-label="AntimatterAI">
+        <circle cx="10" cy="10" r="8" stroke="rgba(0,0,0,.9)" stroke-width="1.5"/>
+        <circle cx="10" cy="10" r="3.5" fill="rgba(0,0,0,.9)"/>
+        <circle cx="10" cy="10" r="1.2" fill="white"/>
+        <path d="M10 2L10 5M10 15L10 18M2 10L5 10M15 10L18 10" stroke="rgba(0,0,0,.85)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span>AntimatterAI <span style="color:var(--fa);font-weight:400">× KSE</span></span>
+  </div>
+  <ul class="nav-links" role="list">
+    <li><a href="#ignite">Ignite</a></li>
+    <li><a href="#uc">Use Cases</a></li>
+    <li><a href="#integ">Architecture</a></li>
+    <li><a href="#alinks">ATOM</a></li>
+  </ul>
+  <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="nbtn">
+    <i data-lucide="external-link" style="width:14px;height:14px"></i>
+    Explore ATOM
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hbg">
+    <img src="https://user-gen-media-assets.s3.amazonaws.com/gemini_images/28aa58d5-5ea8-4ba5-ba71-8113b806a712.png" alt="KSE Arena" width="1920" height="1080" loading="eager"/>
+  </div>
+  <canvas id="pc"></canvas>
+  <div class="hc">
+    <div class="eyebrow"><span class="pulse"></span>AntimatterAI Partnership Proposal &bull; 2026</div>
+    <h1>
+      <span style="display:block"><span class="gt">ATOM</span> &times; <span class="gg">KSE Ignite</span></span>
+      <span class="gwh">The Fan Intelligence OS</span>
+    </h1>
+    <p class="hero-sub">The agentic AI layer that transforms Kroenke Sports &amp; Entertainment&rsquo;s Ticketmaster Ignite ecosystem into a self-optimizing, real-time revenue engine &mdash; without changing your stack.</p>
+    <div class="hctas">
+      <a href="#uc" class="bglow"><i data-lucide="zap" style="width:16px;height:16px"></i>See ATOM in Action</a>
+      <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="bout"><i data-lucide="external-link" style="width:16px;height:16px"></i>ATOM Enterprise</a>
+    </div>
+    <div class="hbadges">
+      <div class="hb"><span class="hbd" style="background:var(--p)"></span>VPC Deployment</div>
+      <div class="hb"><span class="hbd" style="background:var(--gd)"></span>4 KSE Properties</div>
+      <div class="hb"><span class="hbd" style="background:var(--pu)"></span>Zero Vendor Lock-in</div>
+      <div class="hb"><span class="hbd" style="background:var(--bl)"></span>Sub-100ms Edge AI</div>
+    </div>
+  </div>
+  <div class="scue" aria-hidden="true"><i data-lucide="chevrons-down" style="width:16px;height:16px"></i><span>scroll</span></div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="sstrip">
+  <div class="ssi">
+    <div class="sc2"><span class="sn">90<span style="font-size:.5em;color:var(--mu)">%</span></span><div class="sl">of fan mobile time spent in-app</div></div>
+    <div class="sc2"><span class="sn">10<span style="font-size:.5em;color:var(--mu)">×</span></span><div class="sl">avg ticket checks per event</div></div>
+    <div class="sc2"><span class="sn gold">4</span><div class="sl">KSE teams live on Ignite</div></div>
+    <div class="sc2"><span class="sn">&infin;</span><div class="sl">upsell moments ATOM acts on</div></div>
+  </div>
+</div>
+
+<!-- IGNITE -->
+<section id="ignite">
+  <div class="wrap rv">
+    <span class="chip">KSE &times; Ticketmaster Ignite</span>
+    <h2 class="sh">Where the Fan Experience Already Lives</h2>
+    <p class="ssb">KSE deploys Ignite modules across all four properties — placed directly beneath every digital ticket for maximum visibility and revenue potential.</p>
+    <div class="i2c">
+      <div class="gc">
+        <div class="qi">&ldquo;</div>
+        <p class="qt">&ldquo;Offering exclusive, in-app experiences with our tickets unlocks powerful revenue streams and allows us to build deeper fan relationships. Ticketmaster Ignite provides us with the flexibility to innovate, enhance the fan experience, and minimize friction at every touchpoint.&rdquo;</p>
+        <div class="qa">
+          <div class="qav">RC</div>
+          <div><div class="qn">Ricky Casady</div><div class="qti">VP of Ticketing &middot; Kroenke Sports &amp; Entertainment</div></div>
+        </div>
+      </div>
+      <div class="fl">
+        <div class="fc"><div class="fi"><i data-lucide="smartphone" style="width:17px;height:17px"></i></div><div><h4>High-Traffic Module Placement</h4><p>Ignite modules sit directly beneath every digital ticket &mdash; the highest-visibility real estate in the KSE mobile app.</p></div></div>
+        <div class="fc"><div class="fi"><i data-lucide="shopping-bag" style="width:17px;height:17px"></i></div><div><h4>Parking &middot; Merch &middot; F&amp;B &middot; Upgrades</h4><p>Full fan spending journey in one frictionless touchpoint. Upsell, engage, and convert from within the ticket itself.</p></div></div>
+        <div class="fc"><div class="fi"><i data-lucide="building-2" style="width:17px;height:17px"></i></div><div><h4>Multi-Property Reach</h4><p>Denver Nuggets, Colorado Avalanche, Colorado Rapids, Colorado Mammoth &mdash; Ignite live across all four KSE properties.</p></div></div>
+        <div class="fc"><div class="fi" style="background:rgba(245,200,66,.1);color:var(--gd)"><i data-lucide="trending-up" style="width:17px;height:17px"></i></div><div><h4>Revenue-Driven Architecture</h4><p>KSE anticipates major revenue increases from parking, merch, F&amp;B, and exclusive experiences via in-app personalization.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="div"/>
+
+<!-- USE CASES -->
+<section id="uc">
+  <div class="wrap rv">
+    <span class="chip">ATOM in Action</span>
+    <h2 class="sh">How ATOM Supercharges Every Module</h2>
+    <p class="ssb">ATOM embeds as the intelligent agent layer inside Ignite &mdash; reading fan context, predicting intent, executing revenue actions in real time.</p>
+    <div class="tbar" role="tablist">
+      <button class="tb on" data-tab="fan" role="tab">Fan Concierge</button>
+      <button class="tb" data-tab="rev" role="tab">Revenue Engine</button>
+      <button class="tb" data-tab="spon" role="tab">Sponsor Intel</button>
+      <button class="tb" data-tab="ops" role="tab">Ops Automation</button>
+    </div>
+
+    <div class="tp on" id="tab-fan">
+      <div class="tcc">
+        <h3>Personalized Fan Concierge</h3>
+        <p>ATOM reads each fan&rsquo;s event, seat, history, and preferences via Ignite + KORE APIs to surface next-best actions in real time.</p>
+        <div class="ucs">
+          <div class="uu"><div class="un">1</div><div><h5>Pre-Game Itinerary Push</h5><p>Doors, best entrance, parking, club access &mdash; delivered via Ignite engagement modules before fans leave home.</p></div></div>
+          <div class="uu"><div class="un">2</div><div><h5>In-Venue Contextual Upsell</h5><p>Under the digital ticket, ATOM surfaces upgrade offers, VIP add-ons, and F&amp;B pre-orders based on seat, game stage, behavior.</p></div></div>
+          <div class="uu"><div class="un">3</div><div><h5>Post-Event Retention</h5><p>Routes fans to Altitude Authentics, future games, or concerts based on behavior patterns and KORE audience segments.</p></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="fn k"><span class="fd2" style="background:var(--bl)"></span>Fan opens KSE App &rarr; Ticket View</div>
+        <div class="fa2">Ignite SDK triggers ATOM context read</div>
+        <div class="fn a"><span class="fd2" style="background:var(--p)"></span>ATOM reads: seat &middot; history &middot; game-time &middot; behavior</div>
+        <div class="fa2">Agent evaluates next-best action</div>
+        <div class="fn a"><span class="fd2" style="background:var(--p)"></span>Composes: &ldquo;Upgrade to Club Suite &mdash; $48 &mdash; 1 tap&rdquo;</div>
+        <div class="fa2">Surfaces via Ignite module beneath ticket</div>
+        <div class="fn i"><span class="fd2" style="background:var(--gd)"></span>Fan taps &rarr; converted &check; Revenue logged to KORE</div>
+      </div>
+    </div>
+
+    <div class="tp" id="tab-rev">
+      <div class="tcc">
+        <h3>Dynamic Revenue Engine</h3>
+        <p>ATOM is a 360&deg; Revenue Brain &mdash; consuming KORE warehouse data and Ignite events to fire pricing moves and bundle strategies automatically.</p>
+        <div class="ucs">
+          <div class="uu"><div class="un">1</div><div><h5>Real-Time Dynamic Bundles</h5><p>Detects soft demand mid-day, builds targeted food + upgrade bundles, and pushes via Ignite before fans leave home.</p></div></div>
+          <div class="uu"><div class="un">2</div><div><h5>F&amp;B + Retail Intelligence</h5><p>Links Legends data with attendance, opponent, day/time, and history to recommend inventory and in-game offers.</p></div></div>
+          <div class="uu"><div class="un">3</div><div><h5>No-Show Prediction</h5><p>Scores attendance likelihood per holder, triggers win-back offers, surfaces last-minute upsell windows for high-intent fans.</p></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="fn a"><span class="fd2" style="background:var(--p)"></span>ATOM: Tuesday game &mdash; 23% lower bowl unsold</div>
+        <div class="fa2">Revenue anomaly detected &rarr; agent activates</div>
+        <div class="fn a"><span class="fd2" style="background:var(--p)"></span>Builds: Food + Upgrade bundle &mdash; $38 package</div>
+        <div class="fa2">Targeted push via Ignite module 11am</div>
+        <div class="fn i"><span class="fd2" style="background:var(--gd)"></span>4,200 fans see offer &mdash; 847 convert</div>
+        <div class="fa2">Revenue event logged to KORE warehouse</div>
+        <div class="fn g"><span class="fd2" style="background:var(--gr)"></span>+$112K incremental revenue &check;</div>
+      </div>
+    </div>
+
+    <div class="tp" id="tab-spon">
+      <div class="tcc">
+        <h3>Sponsor Intelligence</h3>
+        <p>ATOM auto-tracks sponsor commitments, connects Ignite impressions to activations, and writes post-event recaps &mdash; making KSE sponsors stickier and more valuable.</p>
+        <div class="ucs">
+          <div class="uu"><div class="un">1</div><div><h5>Automated Impression Tracking</h5><p>Monitors each sponsor&rsquo;s promised integrations against actual Ignite engagement metrics &mdash; alerting before pacing falls behind.</p></div></div>
+          <div class="uu"><div class="un">2</div><div><h5>AI-Written Recap Decks</h5><p>Post-event, ATOM auto-builds sponsor narratives: impressions, click rates, conversions, fan reach &mdash; ready instantly.</p></div></div>
+          <div class="uu"><div class="un">3</div><div><h5>Renewal Intelligence</h5><p>Identifies which offers drive highest engagement and recommends placement and targeting adjustments to maximize renewal value.</p></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="fn k"><span class="fd2" style="background:var(--bl)"></span>Sponsor contract: 2M impressions / season</div>
+        <div class="fa2">ATOM ingests SLAs + Ignite event stream</div>
+        <div class="fn a"><span class="fd2" style="background:var(--p)"></span>Pacing: 1.4M (70%) &rarr; alert raised</div>
+        <div class="fa2">Catch-up placement recommendations pushed</div>
+        <div class="fn i"><span class="fd2" style="background:var(--gd)"></span>Module shifted to premium slot &mdash; 3 games</div>
+        <div class="fa2">Season ends &rarr; ATOM drafts recap in 30 sec</div>
+        <div class="fn g"><span class="fd2" style="background:var(--gr)"></span>2.1M impressions &middot; 4.2% CTR &middot; Sponsor renews +20%</div>
+      </div>
+    </div>
+
+    <div class="tp" id="tab-ops">
+      <div class="tcc">
+        <h3>Ops &amp; Staff Automation</h3>
+        <p>ATOM gives KSE operations an AI co-pilot &mdash; automating reporting, surfacing anomalies, and letting staff focus on fan experience.</p>
+        <div class="ucs">
+          <div class="uu"><div class="un">1</div><div><h5>Game-Day Command Briefings</h5><p>Auto-generates pre-game ops briefs: expected attendance, at-risk sections, F&amp;B inventory, parking demand, Ignite status.</p></div></div>
+          <div class="uu"><div class="un">2</div><div><h5>Cross-Property Learning</h5><p>ATOM transfers learnings about offers, no-show risk, and sponsor response across all four KSE properties.</p></div></div>
+          <div class="uu"><div class="un">3</div><div><h5>Membership Retention</h5><p>Analyzes season holder behavior and surfaces renewal risk signals to ticketing reps &mdash; before fans churn, not after.</p></div></div>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="fn a"><span class="fd2" style="background:var(--p)"></span>6am: ATOM begins game-day briefing generation</div>
+        <div class="fa2">Aggregates KORE + Ignite + Legends + Weather</div>
+        <div class="fn a"><span class="fd2" style="background:var(--p)"></span>18,400 fans expected &middot; 3 at-risk sections flagged</div>
+        <div class="fa2">Recommends 2 Ignite changes + F&amp;B restock</div>
+        <div class="fn i"><span class="fd2" style="background:var(--gd)"></span>Ops approves &rarr; deployed in 90 seconds</div>
+        <div class="fa2">Post-game: auto-debrief + sponsor recap</div>
+        <div class="fn g"><span class="fd2" style="background:var(--gr)"></span>KSE execs: Full intelligence dashboard &mdash; 0 manual reports</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="cap">
+  <div class="wrapw rv">
+    <span class="chip">ATOM Platform</span>
+    <h2 class="sh">What Makes ATOM Different</h2>
+    <p class="ssb">Not a chatbot. Not SaaS. A composable enterprise AI framework built to run in your environment, on your data, under your governance.</p>
+    <div class="cg">
+      <div class="cc"><div class="ci"><i data-lucide="shield-check" style="width:22px;height:22px"></i></div><h4>VPC / On-Prem Deployment</h4><p>All fan data, inference, and orchestration stays inside KSE&rsquo;s cloud. No shared pools, no external exposure &mdash; ever.</p><span class="cp">Akamai + Linode Edge</span></div>
+      <div class="cc"><div class="ci"><i data-lucide="cpu" style="width:22px;height:22px"></i></div><h4>Model-Agnostic Runtime</h4><p>Swap AI providers without changing product logic. Run hosted, open-source, or private models per property or use case.</p><span class="cp">Zero Vendor Lock-in</span></div>
+      <div class="cc"><div class="ci"><i data-lucide="git-branch" style="width:22px;height:22px"></i></div><h4>Composable Agent Framework</h4><p>Build agents, retrieval pipelines, tool calls, and deterministic UI into reusable modules across all four KSE apps.</p><span class="cp">Multi-Property Architecture</span></div>
+      <div class="cc"><div class="ci"><i data-lucide="lock" style="width:22px;height:22px"></i></div><h4>Enterprise Governance</h4><p>RBAC, audit logs, encryption, SSO, zero-training guarantees. ATOM never trains on KSE fan data or resells metadata.</p><span class="cp">RBAC + Audit Trails</span></div>
+      <div class="cc"><div class="ci" style="background:rgba(245,200,66,.1);color:var(--gd)"><i data-lucide="zap" style="width:22px;height:22px"></i></div><h4>Real-Time Edge Inference</h4><p>Ultra-low latency for in-venue fan experiences. Regional execution with data-residency boundaries &mdash; near fans, not distant datacenters.</p><span class="cp">Sub-100ms Responses</span></div>
+      <div class="cc"><div class="ci" style="background:rgba(59,130,246,.1);color:var(--bl)"><i data-lucide="database" style="width:22px;height:22px"></i></div><h4>Bring Your Own Data Stack</h4><p>Connect KORE DWA, Legends commerce, and Ignite streams via governed connectors. ATOM orchestrates without owning your data layer.</p><span class="cp">BYO Embeddings + Vectors</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATION -->
+<section id="integ">
+  <div class="wrap rv">
+    <span class="chip">Technical Architecture</span>
+    <h2 class="sh">How the Stack Fits Together</h2>
+    <p class="ssb">ATOM sits as the orchestration layer between KSE&rsquo;s existing investments &mdash; making Ignite, KORE, and Legends self-optimizing instead of just connected.</p>
+    <div class="iarch">
+      <div class="ab"><div class="aico" style="background:rgba(59,130,246,.1)">&#127967;</div><h4>KSE Ecosystem</h4><p>KORE DWA, 4 team apps, Legends retail, ticketing history, memberships, fan CRM</p></div>
+      <div class="aar"><i data-lucide="arrow-right" style="width:18px;height:18px;color:var(--p)"></i><span>governed<br>connectors</span></div>
+      <div class="ab ac2">
+        <div class="aico" style="background:rgba(0,212,200,.1)">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <circle cx="15" cy="15" r="11" stroke="var(--p)" stroke-width="1.5"/>
+            <circle cx="15" cy="15" r="5" fill="var(--p)" fill-opacity=".85"/>
+            <circle cx="15" cy="15" r="2" fill="var(--bg)"/>
+            <path d="M15 4L15 8M15 22L15 26M4 15L8 15M22 15L26 15" stroke="var(--p)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h4 style="color:var(--p)">ATOM Agent Layer</h4>
+        <p>Orchestration &middot; agent runtime &middot; retrieval &middot; tool calls &middot; deterministic UI &mdash; inside KSE&rsquo;s VPC</p>
+      </div>
+      <div class="aar"><i data-lucide="arrow-right" style="width:18px;height:18px;color:var(--gd)"></i><span>Ignite<br>SDK</span></div>
+      <div class="ab"><div class="aico" style="background:rgba(245,200,66,.1)">&#128241;</div><h4>Fan Touchpoints</h4><p>Ignite modules, team apps, in-venue screens, sponsor activations, Altitude Authentics</p></div>
+    </div>
+    <div class="ifeats">
+      <div class="iff"><div class="ifl"><i data-lucide="shield" style="width:11px;height:11px"></i>Security</div><ul role="list"><li>Encrypt at rest + in transit</li><li>Private networking (VPC)</li><li>SSO + RBAC</li><li>Full audit logs</li><li>Zero training on KSE data</li></ul></div>
+      <div class="iff"><div class="ifl"><i data-lucide="database" style="width:11px;height:11px"></i>Data Connectors</div><ul role="list"><li>KORE DWA APIs</li><li>Ignite SDK event streams</li><li>Legends commerce feed</li><li>Ticketmaster Account Mgr</li><li>CRM + Membership data</li></ul></div>
+      <div class="iff"><div class="ifl"><i data-lucide="cpu" style="width:11px;height:11px"></i>Agent Modules</div><ul role="list"><li>Fan Concierge Agent</li><li>Revenue Optimization Agent</li><li>Sponsor Tracking Agent</li><li>Ops Briefing Agent</li><li>Retention Intelligence Agent</li></ul></div>
+      <div class="iff"><div class="ifl"><i data-lucide="server" style="width:11px;height:11px"></i>Deployment</div><ul role="list"><li>KSE Private Cloud (VPC)</li><li>Hybrid cloud + on-prem</li><li>Edge via Akamai + Linode</li><li>Kubernetes orchestration</li><li>White-label, KSE-branded</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENARIO -->
+<section id="scenario">
+  <div class="wrap rv">
+    <span class="chip">Live Scenario</span>
+    <h2 class="sh">Tuesday Night Nuggets &mdash; ATOM End-to-End</h2>
+    <p class="ssb">Game-day walkthrough from ATOM detecting soft demand at 11am to an auto-written $112K revenue debrief after the final buzzer.</p>
+    <div class="ss">
+      <div class="sch">
+        <div class="sct">&#127936; Nuggets vs Warriors &middot; Ball Arena &middot; Tue 7:00pm</div>
+        <span style="font-size:var(--tx);color:var(--mu)">Soft demand: 23% unsold lower bowl</span>
+      </div>
+      <div class="stl">
+        <div class="sstep"><div class="stim">11:00 AM</div><div class="sbd"><strong>ATOM detects soft demand</strong>23% lower bowl unsold. Builds: seat upgrade + F&amp;B voucher = $38.</div><span class="sbdg ba">ATOM Agent</span></div>
+        <div class="sstep"><div class="stim">12:30 PM</div><div class="sbd"><strong>Targeted Ignite push</strong>Offer to 4,200 KORE segment members &mdash; mid-tier, 2+ prior purchases.</div><span class="sbdg bi">Ignite Module</span></div>
+        <div class="sstep"><div class="stim">5:00 PM</div><div class="sbd"><strong>Pre-game concierge fires</strong>Best entrance, Legends merch pickup, halftime Altitude Authentics offer pushed.</div><span class="sbdg ba">ATOM Agent</span></div>
+        <div class="sstep"><div class="stim">6:45 PM</div><div class="sbd"><strong>In-venue upsell window</strong>Fan opens ticket. ATOM: &ldquo;Your upgrade is waiting &mdash; 1 tap.&rdquo; F&amp;B queued for halftime.</div><span class="sbdg bi">Ignite SDK</span></div>
+        <div class="sstep"><div class="stim">Halftime</div><div class="sbd"><strong>F&amp;B offer triggers live</strong>Targeted food + drink pushed. ATOM monitors real-time conversion, adjusts for Q3.</div><span class="sbdg ba">ATOM Agent</span></div>
+        <div class="sstep"><div class="stim">Post-Game</div><div class="sbd"><strong>Auto-debrief generated</strong>$112K incremental &middot; 847 upgrades &middot; 2,190 F&amp;B &middot; Sponsor recap ready for 9am.</div><span class="sbdg bk">KSE Report</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section id="outcomes">
+  <div class="wrap rv">
+    <span class="chip">Expected Outcomes</span>
+    <h2 class="sh">What KSE Can Target in Year 1</h2>
+    <p class="ssb">Based on ATOM&rsquo;s enterprise deployment model and Ignite&rsquo;s existing engagement architecture, these are concrete Year 1 targets.</p>
+    <div class="og">
+      <div class="oc"><span class="on2">+35%</span><p class="od">Incremental per-fan revenue from ATOM-driven upsell bundles across parking, merch, F&amp;B, and seat upgrades.</p></div>
+      <div class="oc"><span class="on2">10&times;</span><p class="od">More fan data signals processed per game &mdash; every ticket-open moment previously going unmonetized, now acted on.</p></div>
+      <div class="oc"><span class="on2">4 Props</span><p class="od">One shared ATOM brain across Nuggets, Avalanche, Rapids, and Mammoth. Learnings compound across properties.</p></div>
+      <div class="oc"><span class="on2">0 hrs</span><p class="od">Manual sponsor reporting per event &mdash; ATOM auto-generates all post-game recaps and sponsor performance narratives.</p></div>
+      <div class="oc"><span class="on2">Real-Time</span><p class="od">Revenue optimization firing in hours, not seasons &mdash; ATOM detects soft demand the morning of each game.</p></div>
+      <div class="oc"><span class="on2">100% KSE</span><p class="od">Full IP ownership. All agents, workflows, fan data in your VPC. Antimatter never trains on KSE data. Ever.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ATOM LINKS -->
+<section id="alinks">
+  <div class="wrap rv">
+    <span class="chip">AntimatterAI Platform</span>
+    <h2 class="sh">Explore ATOM Solutions</h2>
+    <p class="ssb">Built for enterprise deployments requiring isolation, auditability, and deployment control. Full platform at antimatterai.com.</p>
+    <div class="alg">
+      <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="al"><div class="alh"><div class="alico"><i data-lucide="cpu" style="width:20px;height:20px"></i></div><div class="alarr"><i data-lucide="arrow-up-right" style="width:17px;height:17px"></i></div></div><span class="alt2">Core Platform</span><div class="ati">ATOM Enterprise AI</div><p class="ade">Deploy voice, search, and workflow agents in controlled environments &mdash; VPC, on-prem, or edge &mdash; with zero-training guarantees.</p></a>
+      <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer" class="al"><div class="alh"><div class="alico" style="background:rgba(245,200,66,.1);color:var(--gd)"><i data-lucide="sparkles" style="width:20px;height:20px"></i></div><div class="alarr"><i data-lucide="arrow-up-right" style="width:17px;height:17px"></i></div></div><span class="alt2">Full Portfolio</span><div class="ati">AntimatterAI.com</div><p class="ade">Product design, AI development, GTM strategy, healthcare apps, IoT, and enterprise deployment &mdash; the complete Antimatter AI suite.</p></a>
+      <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="al"><div class="alh"><div class="alico" style="background:rgba(59,130,246,.1);color:var(--bl)"><i data-lucide="globe" style="width:20px;height:20px"></i></div><div class="alarr"><i data-lucide="arrow-up-right" style="width:17px;height:17px"></i></div></div><span class="alt2">Edge Deployment</span><div class="ati">Edge AI + Low Latency</div><p class="ade">Regional data-residency. Sub-100ms in-venue responses. Powered by Akamai + Linode edge &mdash; inference near fans.</p></a>
+      <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="al"><div class="alh"><div class="alico" style="background:rgba(34,197,94,.1);color:var(--gr)"><i data-lucide="shield" style="width:20px;height:20px"></i></div><div class="alarr"><i data-lucide="arrow-up-right" style="width:17px;height:17px"></i></div></div><span class="alt2">Security</span><div class="ati">Security &amp; Compliance</div><p class="ade">RBAC, audit logs, SSO, private networking, encryption. Strict isolation for fan data and KSE IP protection.</p></a>
+      <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="al"><div class="alh"><div class="alico" style="background:rgba(139,92,246,.1);color:var(--pu)"><i data-lucide="bar-chart-horizontal" style="width:20px;height:20px"></i></div><div class="alarr"><i data-lucide="arrow-up-right" style="width:17px;height:17px"></i></div></div><span class="alt2">Compare</span><div class="ati">ATOM vs Alternatives</div><p class="ade">vs Kore.ai, Microsoft Copilot Studio, ServiceNow, IBM watsonx on security, IP ownership, and deployment control.</p></a>
+      <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="al"><div class="alh"><div class="alico" style="background:rgba(0,212,200,.1);color:var(--p)"><i data-lucide="code-2" style="width:20px;height:20px"></i></div><div class="alarr"><i data-lucide="arrow-up-right" style="width:17px;height:17px"></i></div></div><span class="alt2">Framework</span><div class="ati">ATOM Framework Core</div><p class="ade">Compose agents, retrieval, tool calls, and deterministic UI into end-to-end systems. Reuse patterns across all KSE properties.</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="ctaw">
+  <div class="ctai">
+    <span class="chip" style="justify-content:center">Next Step</span>
+    <h2>Ready to Build ATOM into KSE Ignite?</h2>
+    <p>Schedule a 30-minute technical walkthrough &mdash; we&rsquo;ll demo ATOM live against a simulated Ignite module environment for the KSE and Ticketmaster teams.</p>
+    <div class="ctabs">
+      <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer" class="bglow"><i data-lucide="calendar" style="width:16px;height:16px"></i>Book a Demo at AntimatterAI.com</a>
+      <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="bout"><i data-lucide="file-text" style="width:16px;height:16px"></i>Explore ATOM Platform</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Built by <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer">AntimatterAI</a> &middot; ATOM &times; KSE Ignite Partnership &middot; 2026</p>
+  <p style="margin-top:var(--s2)">
+    <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer">antimatterai.com</a> &middot;
+    <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer">ATOM Enterprise</a> &middot;
+    <a href="https://business.ticketmaster.com/kse-ignite/" target="_blank" rel="noopener noreferrer">KSE Ignite</a>
+  </p>
+</footer>
+
+<script>
+lucide.createIcons();
+
+// Nav scroll class
+const nav = document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('sc',window.scrollY>40),{passive:true});
+
+// Tabs
+document.querySelectorAll('.tb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tb').forEach(x=>{x.classList.remove('on');x.setAttribute('aria-selected','false');});
+    document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
+    b.classList.add('on');b.setAttribute('aria-selected','true');
+    document.getElementById('tab-'+b.dataset.tab).classList.add('on');
+  });
+});
+
+// Nav active link highlight
+document.querySelectorAll('section[id]').forEach(s=>{
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        document.querySelectorAll('.nav-links a').forEach(l=>{
+          l.classList.toggle('ac',l.getAttribute('href')==='#'+e.target.id);
+        });
+      }
+    });
+  },{threshold:.3}).observe(s);
+});
+
+// Particle field
+(function(){
+  const c=document.getElementById('pc'),x=c.getContext('2d');
+  let W,H,pts=[];
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+  rs();window.addEventListener('resize',rs,{passive:true});
+  const cls=['0,212,200','59,130,246','139,92,246'];
+  class P{
+    constructor(){this.reset();}
+    reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.4+.3;this.vx=(Math.random()-.5)*.28;this.vy=(Math.random()-.5)*.28;this.a=Math.random()*.35+.08;this.c=cls[Math.floor(Math.random()*cls.length)];}
+    upd(){this.x+=this.vx;this.y+=this.vy;if(this.x<-5||this.x>W+5||this.y<-5||this.y>H+5)this.reset();}
+    drw(){x.beginPath();x.arc(this.x,this.y,this.r,0,Math.PI*2);x.fillStyle=`rgba(${this.c},${this.a})`;x.fill();}
+  }
+  for(let i=0;i<100;i++)pts.push(new P());
+  function loop(){
+    x.clearRect(0,0,W,H);
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+        if(d<90){x.beginPath();x.moveTo(pts[i].x,pts[i].y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle=`rgba(0,212,200,${.035*(1-d/90)})`;x.lineWidth=.4;x.stroke();}
+      }
+      pts[i].upd();pts[i].drw();
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// Stagger card entry with IntersectionObserver
+const stagger=['.sc2','.cc','.oc','.al','.fc','.uu','.sstep'];
+stagger.forEach(sel=>{
+  document.querySelectorAll(sel).forEach((el,i)=>{
+    el.style.opacity='0';el.style.transform='translateY(12px)';el.style.transition=`opacity .55s var(--e) ${i*45}ms,transform .55s var(--e) ${i*45}ms`;
+    new IntersectionObserver(([e])=>{
+      if(e.isIntersecting){el.style.opacity='1';el.style.transform='translateY(0)';}
+    },{threshold:.1,rootMargin:'0px 0px -40px 0px'}).observe(el);
+  });
+});
+</script>
+</body>
+</html>
