@@ -3,44 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATOM × Ignite × KSE — Antimatter AI</title>
+<title>ATOM × Ignite × KSE — a Nirmata Holdings company</title>
+<meta name="description" content="ATOM governed agentic AI on top of KSE's Ignite deployment — turning fan engagement into predictive revenue across the Nuggets, Avalanche, Rapids, and Mammoth. ATOM, a Nirmata Holdings company.">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,900,700&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   ART DIRECTION: Antimatter AI Brand System
-   Palette: Deep #020202 foundation + purple accent scale
-   Typography: Plus Jakarta Sans (body) + Bebas Neue (display)
-   Density: Spacious — generous inter-section rhythm
-   Motion: Expressive — scroll reveals, counter animations
+   ART DIRECTION: ATOM + Nirmata Holdings Brand & Design Standard
+   Canonical upstream v2.2.2 (commit 4dc80b9). See
+   /brand/ATOM_DESIGN_SYSTEM_VERSION.json and docs/ATOM-DESIGN-SYSTEM-ADOPTION.md
+   Palette: dark-first layered near-black (#050607 → #24252b), NEVER flat black.
+   Identity: canonical ATOM teal #00F0DF — single source of truth for the
+   shared identity (logo, orbital core, loader, focus, live signals).
+   Product/data channels (Gold #F5C842, Success #3FD18B) are used with restraint
+   for KSE sports-data + agent-outcome moments only — one accent per surface.
+   Typography: Cabinet Grotesk (display) + Satoshi (body) + JetBrains Mono.
+   Motion: signature cubic-bezier(0.16,1,0.3,1) @ 180ms; motifs orbit/scan/breathe.
    ============================================================ */
 
 :root {
-  /* Antimatter AI Brand Tokens */
-  --am-bg:           #020202;
-  --am-fg:           #f6f6fd;
-  --am-accent:       #696aac;
-  --am-primary:      #3e3f7e;
-  --am-secondary:    #a2a3e9;
-  --am-tertiary:     #c7c8f2;
-  --am-lightaccent:  #e3e3f8;
+  /* ATOM CORE TEAL LADDER — single canonical hue family (#00F0DF).
+     Every ATOM-core identity element derives from these; never hard-code a
+     near-teal. This is the one source of truth for teal in the app. */
+  --teal-core:   #00f0df;
+  --teal-bright: #5cf7ec;
+  --teal-dim:    #00b6ab;
+  --teal-deep:   #00766e;
+  --teal-glow:   rgba(0,240,223,0.55);
+  --teal-surface: rgba(0,240,223,0.12);
+  --teal-border:  rgba(0,240,223,0.40);
 
-  /* Derived surfaces */
-  --am-surface:      rgba(246,246,253,0.03);
-  --am-surface-2:    rgba(246,246,253,0.05);
-  --am-surface-3:    rgba(246,246,253,0.08);
-  --am-border:       rgba(246,246,253,0.10);
-  --am-border-hover: rgba(246,246,253,0.20);
-  --am-muted:        rgba(246,246,253,0.55);
-  --am-faint:        rgba(246,246,253,0.35);
-  --am-glass:        rgba(2,2,2,0.20);
+  /* Legacy component aliases now mapped onto the canonical teal ladder + the
+     canonical near-black surface stack. Downstream component rules read these. */
+  --am-bg:           #050607;
+  --am-fg:           #f6f8f8;
+  --am-accent:       var(--teal-core);
+  --am-primary:      var(--teal-deep);
+  --am-secondary:    var(--teal-bright);
+  --am-tertiary:     #8ef8ee;
+  --am-lightaccent:  #b8fff8;
 
-  /* Gold/KSE accent for sports data moments */
-  --kse-gold:        #f9c946;
-  --kse-gold-dim:    rgba(249,201,70,0.15);
-  --kse-green:       #4ade80;
-  --kse-green-dim:   rgba(74,222,128,0.12);
+  /* Derived surfaces (canonical layered ink stack expressed as fg alphas) */
+  --am-surface:      rgba(246,248,248,0.03);
+  --am-surface-2:    rgba(246,248,248,0.05);
+  --am-surface-3:    rgba(246,248,248,0.08);
+  --am-border:       rgba(246,248,248,0.10);
+  --am-border-hover: rgba(246,248,248,0.20);
+  --am-muted:        rgba(246,248,248,0.55);
+  --am-faint:        rgba(246,248,248,0.35);
+  --am-glass:        rgba(5,6,7,0.20);
+
+  /* Product/data channels — canonical Gold + Success, used with restraint */
+  --kse-gold:        #f5c842;
+  --kse-gold-dim:    rgba(245,200,66,0.15);
+  --kse-green:       #3fd18b;
+  --kse-green-dim:   rgba(63,209,139,0.12);
 
   /* Type scale (fluid) */
   --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
@@ -52,11 +72,12 @@
   --text-3xl:  clamp(2.5rem,   1rem    + 4vw,    5rem);
   --text-hero: clamp(3rem,     0.5rem  + 7vw,    8rem);
 
-  /* Bebas display font */
-  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-body:    'Plus Jakarta Sans', 'Arial', 'Helvetica', sans-serif;
+  /* Canonical faces — display grotesk + body sans + mono, with metric fallback */
+  --font-display: 'Cabinet Grotesk', 'Display Fallback', 'Arial Narrow', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Helvetica', sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 
-  /* Spacing */
+  /* Spacing (4px system) */
   --sp-1:  0.25rem; --sp-2:  0.5rem;  --sp-3:  0.75rem; --sp-4:  1rem;
   --sp-5:  1.25rem; --sp-6:  1.5rem;  --sp-8:  2rem;    --sp-10: 2.5rem;
   --sp-12: 3rem;    --sp-16: 4rem;    --sp-20: 5rem;    --sp-24: 6rem;
@@ -65,11 +86,27 @@
   --r-sm: 0.375rem; --r-md: 0.5rem; --r-lg: 0.75rem;
   --r-xl: 1rem; --r-2xl: 1.5rem; --r-full: 9999px;
 
+  /* Window chrome + traffic-light controls (canonical ATOM pattern) */
+  --tl-red: #ff5f57; --tl-yellow: #febc2e; --tl-green: #28c840;
+  --tl-size: 12px;
+
   /* Content */
   --w-main: 1500px;
   --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
   --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
   --page-transition: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Metric-matched fallback for the display face so hero tracking never collides
+   during the Cabinet Grotesk swap window (FOUT state). */
+@font-face {
+  font-family: 'Display Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Liberation Sans');
+  font-weight: 700 900;
+  size-adjust: 97%;
+  ascent-override: 96%;
+  descent-override: 22%;
+  line-gap-override: 0%;
 }
 @media (max-width: 1536px) { :root { --w-main: calc(100% - 60px); } }
 @media (max-width: 640px)  { :root { --w-main: calc(100% - 40px); } }
@@ -88,15 +125,38 @@ body {
 img, picture, video, canvas, svg { display: block; max-width: 100%; }
 ul[role="list"] { list-style: none; }
 h1,h2,h3,h4,h5,h6 { text-wrap: balance; line-height: 1.15; }
+/* Canonical display face is variable-weight; force the heavy cut everywhere the
+   old single-weight Bebas display font was used so glyphs never fall back to 400. */
+.hero-headline, .section-title, .cta-headline, .stat-num, .loader-count,
+.loader-watermark, .nav-logo, .footer-brand, .timeline-kpi-num,
+.solution-card-num, .quote-mark, .tab-content-left h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+}
 p, li { text-wrap: pretty; }
 button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
 a { color: inherit; text-decoration: none; }
-::selection { background: rgba(105,106,172,0.35); color: var(--am-fg); }
+::selection { background: rgba(0,240,223,0.35); color: var(--am-fg); }
 :focus-visible { outline: 2px solid var(--am-accent); outline-offset: 3px; border-radius: var(--r-sm); }
 @media (prefers-reduced-motion: reduce) {
   *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
 }
 .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0; }
+/* Skip link — hidden until focused (canonical accessibility requirement). */
+.skip-link {
+  position: fixed; top: var(--sp-3); left: var(--sp-3); z-index: 10000;
+  transform: translateY(-160%);
+  background: var(--am-accent); color: #062e2b;
+  padding: var(--sp-2) var(--sp-4); border-radius: var(--r-md);
+  font-size: var(--text-sm); font-weight: 700;
+  transition: transform var(--transition);
+}
+.skip-link:focus { transform: translateY(0); outline: none; }
+
+/* Canonical signature motion motifs — used sparingly, tied to meaning. */
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes breathe { 0%,100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes scan { 0% { transform: translateY(-100%); opacity: 0; } 40%,60% { opacity: 1; } 100% { transform: translateY(220%); opacity: 0; } }
 
 /* ============================================================  LOADING SCREEN */
 #loader {
@@ -109,7 +169,7 @@ a { color: inherit; text-decoration: none; }
 .loader-watermark {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   font-family: var(--font-display); font-size: clamp(3rem, 12vw, 10rem);
-  color: rgba(246,246,253,0.03); letter-spacing: 0.05em; text-align: center; user-select: none;
+  color: rgba(246,248,248,0.03); letter-spacing: 0.05em; text-align: center; user-select: none;
   line-height: 1;
 }
 .loader-panel {
@@ -117,7 +177,7 @@ a { color: inherit; text-decoration: none; }
 }
 .loader-count {
   font-family: var(--font-display); font-size: clamp(4rem, 12vw, 9rem);
-  background: linear-gradient(93.92deg, #8587e3, #4c4dac, #696aac);
+  background: linear-gradient(93.92deg, #5cf7ec, #00b6ab, #00f0df);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   line-height: 1; letter-spacing: -0.02em;
 }
@@ -126,12 +186,12 @@ a { color: inherit; text-decoration: none; }
   color: var(--am-muted); margin-top: var(--sp-3);
 }
 .loader-bar-wrap {
-  width: 200px; height: 2px; background: rgba(246,246,253,0.08);
+  width: 200px; height: 2px; background: rgba(246,248,248,0.08);
   border-radius: var(--r-full); margin: var(--sp-6) auto 0; overflow: hidden;
 }
 .loader-bar {
   height: 100%; width: 0%;
-  background: linear-gradient(90deg, #8587e3, #696aac);
+  background: linear-gradient(90deg, #5cf7ec, #00f0df);
   border-radius: var(--r-full); transition: width 0.05s linear;
 }
 
@@ -143,7 +203,7 @@ a { color: inherit; text-decoration: none; }
   transition: background 0.3s ease, transform 0.3s ease;
 }
 .nav.scrolled {
-  background: linear-gradient(to bottom, rgba(2,2,2,0.95) 0%, rgba(2,2,2,0.0) 100%);
+  background: linear-gradient(to bottom, rgba(5,6,7,0.95) 0%, rgba(5,6,7,0.0) 100%);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 .nav.hidden-nav { transform: translateY(-100%); }
@@ -152,8 +212,14 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.08em;
 }
 .nav-logo svg { width: 36px; height: 36px; }
-.nav-logo-text { color: var(--am-fg); }
+.nav-logo-text { color: var(--am-fg); font-weight: 900; letter-spacing: 0.06em; }
 .nav-logo-x { color: var(--am-accent); }
+/* Canonical orbital mark — orbits stay neutral; nucleus + traveling electron
+   carry the teal accent. The traveling electron encodes a live, working agent,
+   so it orbits only where that state is real (the always-on brand mark). */
+.atom-mark .atom-electron { transform-origin: 24px 24px; animation: orbit 7s linear infinite; }
+.atom-mark .atom-nucleus { animation: breathe 3.2s var(--transition) infinite; transform-origin: 24px 24px; }
+.atom-mark:hover .atom-electron { animation-duration: 3.5s; }
 .nav-links { display: flex; align-items: center; gap: var(--sp-8); }
 .nav-links a {
   font-size: var(--text-sm); color: var(--am-muted);
@@ -164,16 +230,16 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: center; gap: var(--sp-3);
   padding: 10px 24px 10px 20px;
   border-radius: var(--r-full);
-  border: 1px solid rgba(246,246,253,0.4);
+  border: 1px solid rgba(246,248,248,0.4);
   background: var(--am-glass); backdrop-filter: blur(16px);
   font-size: var(--text-sm); font-weight: 500;
   transition: all 0.3s ease;
   overflow: hidden; position: relative;
 }
-.nav-cta:hover { border-color: rgba(246,246,253,0.7); background: rgba(105,106,172,0.15); }
+.nav-cta:hover { border-color: rgba(246,248,248,0.7); background: rgba(0,240,223,0.15); }
 .nav-cta-icon {
   width: 28px; height: 28px; border-radius: var(--r-full);
-  background: rgba(246,246,253,0.1); display: flex; align-items: center; justify-content: center;
+  background: rgba(246,248,248,0.1); display: flex; align-items: center; justify-content: center;
   transition: all 0.3s ease;
 }
 .nav-cta:hover .nav-cta-icon { background: var(--am-accent); }
@@ -186,7 +252,7 @@ a { color: inherit; text-decoration: none; }
 }
 .mobile-menu {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999;
-  background: rgba(2,2,2,0.98); backdrop-filter: blur(20px);
+  background: rgba(5,6,7,0.98); backdrop-filter: blur(20px);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-8);
   opacity: 0; visibility: hidden; transition: all 0.3s ease;
 }
@@ -211,16 +277,16 @@ a { color: inherit; text-decoration: none; }
   position: absolute; inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(2,2,2,0.3) 0%,
-    rgba(2,2,2,0.15) 30%,
-    rgba(2,2,2,0.5) 60%,
-    rgba(2,2,2,0.92) 85%,
-    rgba(2,2,2,1) 100%
+    rgba(5,6,7,0.3) 0%,
+    rgba(5,6,7,0.15) 30%,
+    rgba(5,6,7,0.5) 60%,
+    rgba(5,6,7,0.92) 85%,
+    rgba(5,6,7,1) 100%
   );
 }
 .hero-light-rays {
   position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(105,106,172,0.18) 0%, transparent 70%);
+  background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(0,240,223,0.18) 0%, transparent 70%);
   animation: heroGlow 4s ease-in-out infinite alternate;
 }
 @keyframes heroGlow {
@@ -230,7 +296,7 @@ a { color: inherit; text-decoration: none; }
 .hero-orb {
   position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
   width: min(600px, 80vw); height: min(400px, 50vw);
-  background: radial-gradient(ellipse, rgba(62,63,126,0.5) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(0,118,110,0.5) 0%, transparent 70%);
   filter: blur(60px); pointer-events: none;
   animation: orbPulse 6s ease-in-out infinite;
 }
@@ -252,8 +318,8 @@ a { color: inherit; text-decoration: none; }
 .hero-badge {
   display: flex; align-items: center; gap: var(--sp-2);
   padding: 6px 14px; border-radius: var(--r-full);
-  border: 1px solid rgba(246,246,253,0.15);
-  background: rgba(2,2,2,0.5); backdrop-filter: blur(8px);
+  border: 1px solid rgba(246,248,248,0.15);
+  background: rgba(5,6,7,0.5); backdrop-filter: blur(8px);
   font-size: var(--text-xs); font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--am-tertiary);
 }
@@ -262,7 +328,7 @@ a { color: inherit; text-decoration: none; }
   background: var(--am-accent); box-shadow: 0 0 8px var(--am-accent);
   animation: dotPulse 2s ease-in-out infinite;
 }
-.hero-badge.gold-badge { color: var(--kse-gold); border-color: rgba(249,201,70,0.2); }
+.hero-badge.gold-badge { color: var(--kse-gold); border-color: rgba(245,200,66,0.2); }
 .hero-badge.gold-badge .dot { background: var(--kse-gold); box-shadow: 0 0 8px var(--kse-gold); }
 @keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
 .hero-headline {
@@ -270,12 +336,12 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(3.5rem, 10vw, 9rem);
   line-height: 0.95; letter-spacing: 0.02em;
   color: var(--am-fg);
-  text-shadow: 0 0 80px rgba(105,106,172,0.3);
+  text-shadow: 0 0 80px rgba(0,240,223,0.3);
 }
 .hero-headline .accent-word {
-  background: linear-gradient(93.92deg, #8587e3 -13.51%, #4c4dac 40.91%, #696aac 113.69%);
+  background: linear-gradient(93.92deg, #5cf7ec -13.51%, #00b6ab 40.91%, #00f0df 113.69%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  filter: drop-shadow(0 0 20px rgba(105,106,172,0.4));
+  filter: drop-shadow(0 0 20px rgba(0,240,223,0.4));
 }
 .hero-subhead {
   font-size: var(--text-lg); font-weight: 300; color: var(--am-muted);
@@ -286,28 +352,28 @@ a { color: inherit; text-decoration: none; }
   display: flex; gap: var(--sp-4); flex-wrap: wrap; justify-content: center;
 }
 .btn-primary {
-  background: linear-gradient(93.92deg, #8587e3 -13.51%, #4c4dac 40.91%, #696aac 113.69%);
-  box-shadow: 0px 0px 10px #696aac, inset 0px 0px 2px rgba(255,255,255,0.61);
+  background: linear-gradient(93.92deg, #5cf7ec -13.51%, #00b6ab 40.91%, #00f0df 113.69%);
+  box-shadow: 0px 0px 10px #00f0df, inset 0px 0px 2px rgba(255,255,255,0.61);
   padding: 14px 36px; border-radius: 40px;
   font-size: var(--text-sm); font-weight: 600; color: var(--am-fg);
   transition: box-shadow 0.3s ease, transform 0.2s ease;
   display: inline-flex; align-items: center; gap: var(--sp-2);
 }
 .btn-primary:hover {
-  box-shadow: 0px 0px 25px #696aac, inset 0px 0px 6.7px rgba(255,255,255,0.9);
+  box-shadow: 0px 0px 25px #00f0df, inset 0px 0px 6.7px rgba(255,255,255,0.9);
   transform: translateY(-1px);
 }
 .btn-inverted {
-  background: transparent; border: 1.5px solid #8587e3; color: #a2a3e9;
-  box-shadow: 0px 0px 10px rgba(105,106,172,0.25), inset 0px 0px 2px rgba(133,135,227,0.25);
+  background: transparent; border: 1.5px solid var(--teal-border); color: var(--teal-bright);
+  box-shadow: 0px 0px 10px rgba(0,240,223,0.25), inset 0px 0px 2px rgba(0,240,223,0.25);
   padding: 13px 36px; border-radius: 40px;
   font-size: var(--text-sm); font-weight: 500;
   transition: all 0.3s ease;
   display: inline-flex; align-items: center; gap: var(--sp-2);
 }
 .btn-inverted:hover {
-  background: rgba(133,135,227,0.08);
-  box-shadow: 0px 0px 25px rgba(105,106,172,0.45), inset 0px 0px 6.7px rgba(133,135,227,0.45);
+  background: rgba(0,240,223,0.08);
+  box-shadow: 0px 0px 25px rgba(0,240,223,0.45), inset 0px 0px 6.7px rgba(0,240,223,0.45);
   transform: translateY(-1px);
 }
 .hero-scroll-hint {
@@ -324,13 +390,13 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   border-top: 1px solid var(--am-border);
   border-bottom: 1px solid var(--am-border);
-  background: rgba(62,63,126,0.06);
+  background: rgba(0,118,110,0.06);
   backdrop-filter: blur(8px);
   overflow: hidden;
 }
 .stats-bar::before {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(105,106,172,0.04) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(0,240,223,0.04) 50%, transparent 100%);
 }
 .stats-bar-inner {
   max-width: var(--w-main); margin: 0 auto;
@@ -346,12 +412,12 @@ a { color: inherit; text-decoration: none; }
 .stat-num {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 4vw, 4rem);
-  background: linear-gradient(93.92deg, #8587e3, #696aac);
+  background: linear-gradient(93.92deg, #5cf7ec, #00f0df);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   line-height: 1;
 }
 .stat-num.gold-stat {
-  background: linear-gradient(93.92deg, var(--kse-gold), #f97316);
+  background: linear-gradient(93.92deg, var(--kse-gold), #d99a1a);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .stat-label { font-size: var(--text-xs); color: var(--am-muted); letter-spacing: 0.05em; line-height: 1.4; }
@@ -392,7 +458,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ============================================================  IGNITE SECTION */
-.ignite-section { background: linear-gradient(180deg, var(--am-bg) 0%, rgba(62,63,126,0.04) 50%, var(--am-bg) 100%); }
+.ignite-section { background: linear-gradient(180deg, var(--am-bg) 0%, rgba(0,118,110,0.04) 50%, var(--am-bg) 100%); }
 .ignite-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-16); align-items: start; margin-top: var(--sp-12);
 }
@@ -409,7 +475,7 @@ a { color: inherit; text-decoration: none; }
 }
 .ignite-quote-block::after {
   content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-  background: radial-gradient(ellipse 60% 40% at 80% 10%, rgba(105,106,172,0.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0,240,223,0.06) 0%, transparent 70%);
   pointer-events: none;
 }
 .quote-mark {
@@ -434,14 +500,14 @@ a { color: inherit; text-decoration: none; }
 .kse-prop-card:hover { border-color: var(--am-border-hover); background: var(--am-surface-2); }
 .kse-prop-icon {
   width: 44px; height: 44px; border-radius: var(--r-lg);
-  background: rgba(105,106,172,0.12); display: flex; align-items: center; justify-content: center;
+  background: rgba(0,240,223,0.12); display: flex; align-items: center; justify-content: center;
   font-size: 1.4rem; flex-shrink: 0;
 }
 .kse-prop-name { font-weight: 600; font-size: var(--text-sm); }
 .kse-prop-desc { font-size: var(--text-xs); color: var(--am-muted); }
 .kse-prop-badge {
   margin-left: auto; padding: 3px 10px; border-radius: var(--r-full);
-  background: rgba(105,106,172,0.12); border: 1px solid rgba(105,106,172,0.3);
+  background: rgba(0,240,223,0.12); border: 1px solid rgba(0,240,223,0.3);
   font-size: 10px; color: var(--am-secondary); letter-spacing: 0.08em; text-transform: uppercase;
   white-space: nowrap;
 }
@@ -464,7 +530,7 @@ a { color: inherit; text-decoration: none; }
 .tab-btn:hover { color: var(--am-fg); background: var(--am-surface); }
 .tab-btn.active {
   color: var(--am-secondary);
-  background: rgba(105,106,172,0.06);
+  background: rgba(0,240,223,0.06);
   border-color: var(--am-border); border-bottom-color: var(--am-bg);
 }
 .tab-panel { display: none; }
@@ -488,7 +554,7 @@ a { color: inherit; text-decoration: none; }
 .tab-feature:hover { border-color: var(--am-border-hover); }
 .tab-feature-icon {
   width: 36px; height: 36px; border-radius: var(--r-md); flex-shrink: 0;
-  background: rgba(105,106,172,0.1); display: flex; align-items: center; justify-content: center;
+  background: rgba(0,240,223,0.1); display: flex; align-items: center; justify-content: center;
 }
 .tab-feature-icon svg { width: 18px; height: 18px; }
 .tab-feature-title { font-weight: 600; font-size: var(--text-sm); color: var(--am-fg); margin-bottom: 2px; }
@@ -499,10 +565,29 @@ a { color: inherit; text-decoration: none; }
 }
 .dataflow-diagram::before {
   content: ''; position: absolute; top: 0; right: 0; width: 200px; height: 200px;
-  background: radial-gradient(ellipse, rgba(62,63,126,0.15) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(0,118,110,0.15) 0%, transparent 70%);
   pointer-events: none;
 }
-.dataflow-title { font-size: var(--text-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--am-faint); margin-bottom: var(--sp-6); }
+/* Canonical traffic-light window chrome — applied only to the live agent
+   data-flow / evidence panels, where a terminal/agent surface is meaningful.
+   The lights are decorative (pure CSS, non-interactive); they signal an
+   agent/evidence surface without implying OS window controls. */
+.dataflow-title {
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin: calc(var(--sp-8) * -1) calc(var(--sp-8) * -1) var(--sp-6);
+  padding: var(--sp-3) var(--sp-5) var(--sp-3) calc(var(--sp-5) + (var(--tl-size) + 8px) * 2 + var(--sp-3));
+  position: relative;
+  background: var(--am-surface-2);
+  border-bottom: 1px solid var(--am-border);
+  border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+  font-size: var(--text-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--am-faint);
+}
+.dataflow-title::before {
+  content: ''; position: absolute; left: var(--sp-5); top: 50%; transform: translateY(-50%);
+  width: var(--tl-size); height: var(--tl-size); border-radius: 50%;
+  background: var(--tl-red);
+  box-shadow: calc(var(--tl-size) + 8px) 0 0 var(--tl-yellow), calc((var(--tl-size) + 8px) * 2) 0 0 var(--tl-green);
+}
 .dataflow-nodes { display: flex; flex-direction: column; gap: var(--sp-2); }
 .dataflow-row { display: flex; align-items: center; gap: var(--sp-3); }
 .dataflow-node {
@@ -510,10 +595,10 @@ a { color: inherit; text-decoration: none; }
   background: var(--am-surface-2); border: 1px solid var(--am-border);
   font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.05em;
 }
-.dataflow-node.atom-node { background: rgba(105,106,172,0.12); border-color: rgba(105,106,172,0.3); color: var(--am-secondary); }
-.dataflow-node.ignite-node { background: rgba(249,201,70,0.06); border-color: rgba(249,201,70,0.2); color: var(--kse-gold); }
-.dataflow-node.kse-node { background: rgba(74,222,128,0.06); border-color: rgba(74,222,128,0.2); color: var(--kse-green); }
-.dataflow-node.output-node { background: rgba(162,163,233,0.08); border-color: rgba(162,163,233,0.25); color: var(--am-tertiary); }
+.dataflow-node.atom-node { background: rgba(0,240,223,0.12); border-color: rgba(0,240,223,0.3); color: var(--am-secondary); }
+.dataflow-node.ignite-node { background: rgba(245,200,66,0.06); border-color: rgba(245,200,66,0.2); color: var(--kse-gold); }
+.dataflow-node.kse-node { background: rgba(63,209,139,0.06); border-color: rgba(63,209,139,0.2); color: var(--kse-green); }
+.dataflow-node.output-node { background: rgba(92,247,236,0.08); border-color: rgba(92,247,236,0.25); color: var(--am-tertiary); }
 .dataflow-arrow {
   color: var(--am-faint); font-size: 0.9rem; flex-shrink: 0;
   animation: arrowPulse 2s ease-in-out infinite;
@@ -534,7 +619,7 @@ a { color: inherit; text-decoration: none; }
 .timeline-scenario-badge {
   display: inline-flex; align-items: center; gap: var(--sp-3);
   padding: var(--sp-3) var(--sp-5); border-radius: var(--r-xl);
-  background: var(--kse-gold-dim); border: 1px solid rgba(249,201,70,0.3);
+  background: var(--kse-gold-dim); border: 1px solid rgba(245,200,66,0.3);
   font-size: var(--text-xs); letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--kse-gold); font-weight: 600; margin-bottom: var(--sp-8);
 }
@@ -564,7 +649,7 @@ a { color: inherit; text-decoration: none; }
 }
 .timeline-item:last-child { padding-bottom: 0; }
 .timeline-dot {
-  position: absolute; left: -var(--sp-8); left: calc(-2rem + 6px);
+  position: absolute; left: calc(-2rem + 6px);
   top: 4px; width: 12px; height: 12px; border-radius: 50%;
   background: var(--am-border); border: 2px solid var(--am-bg);
   transition: all 0.3s ease;
@@ -583,11 +668,11 @@ a { color: inherit; text-decoration: none; }
 .timeline-metric {
   display: inline-block; margin-top: var(--sp-2);
   padding: 3px 10px; border-radius: var(--r-full);
-  background: var(--kse-gold-dim); border: 1px solid rgba(249,201,70,0.25);
+  background: var(--kse-gold-dim); border: 1px solid rgba(245,200,66,0.25);
   font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--kse-gold); font-weight: 700;
 }
 .timeline-item.success-moment .timeline-metric {
-  background: var(--kse-green-dim); border-color: rgba(74,222,128,0.25); color: var(--kse-green);
+  background: var(--kse-green-dim); border-color: rgba(63,209,139,0.25); color: var(--kse-green);
 }
 @media (max-width: 900px) { .timeline-intro { grid-template-columns: 1fr; } }
 
@@ -606,16 +691,16 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(90deg, transparent, var(--am-accent), transparent);
   opacity: 0; transition: opacity var(--transition-slow);
 }
-.solution-card:hover { border-color: rgba(105,106,172,0.35); background: var(--am-surface-2); transform: translateY(-3px); }
+.solution-card:hover { border-color: rgba(0,240,223,0.35); background: var(--am-surface-2); transform: translateY(-3px); }
 .solution-card:hover::before { opacity: 1; }
 .solution-card-num {
   font-family: var(--font-display); font-size: 3.5rem; line-height: 1;
-  color: rgba(105,106,172,0.15); position: absolute; top: var(--sp-4); right: var(--sp-6);
+  color: rgba(0,240,223,0.15); position: absolute; top: var(--sp-4); right: var(--sp-6);
   letter-spacing: -0.02em;
 }
 .solution-tag {
   display: inline-flex; padding: 3px 10px; border-radius: var(--r-full);
-  background: rgba(105,106,172,0.1); border: 1px solid rgba(105,106,172,0.2);
+  background: rgba(0,240,223,0.1); border: 1px solid rgba(0,240,223,0.2);
   font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--am-secondary);
   font-weight: 600; width: fit-content;
 }
@@ -634,20 +719,20 @@ a { color: inherit; text-decoration: none; }
 /* ============================================================  FINAL CTA */
 .cta-section {
   position: relative; overflow: hidden;
-  background: linear-gradient(180deg, var(--am-bg) 0%, rgba(62,63,126,0.08) 40%, var(--am-bg) 100%);
+  background: linear-gradient(180deg, var(--am-bg) 0%, rgba(0,118,110,0.08) 40%, var(--am-bg) 100%);
   padding: clamp(80px, 10vw, 160px) var(--sp-8);
   text-align: center;
 }
 .cta-orb {
   position: absolute; bottom: -40%; left: 50%; transform: translateX(-50%);
   width: 600px; height: 400px;
-  background: radial-gradient(ellipse, rgba(62,63,126,0.45) 0%, transparent 65%);
+  background: radial-gradient(ellipse, rgba(0,118,110,0.45) 0%, transparent 65%);
   filter: blur(40px); pointer-events: none;
 }
 .cta-orb-top {
   position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
   width: 400px; height: 200px;
-  background: radial-gradient(ellipse, rgba(105,106,172,0.2) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(0,240,223,0.2) 0%, transparent 70%);
   filter: blur(30px); pointer-events: none;
 }
 .cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
@@ -677,15 +762,17 @@ footer {
 }
 .footer-horizon {
   position: absolute; bottom: 0; left: 0; right: 0; height: 300px; pointer-events: none;
-  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(62,63,126,0.35) 0%, transparent 70%);
+  background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,118,110,0.35) 0%, transparent 70%);
   filter: blur(20px);
 }
 .footer-inner {
   max-width: var(--w-main); margin: 0 auto; position: relative; z-index: 1;
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--sp-6);
 }
-.footer-brand { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.1em; color: var(--am-muted); }
+.footer-brandblock { display: flex; flex-direction: column; gap: var(--sp-1); }
+.footer-brand { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.1em; color: var(--am-fg); }
 .footer-brand span { color: var(--am-accent); }
+.footer-endorsement { font-size: var(--text-xs); color: var(--am-faint); letter-spacing: 0.06em; }
 .footer-links { display: flex; gap: var(--sp-6); flex-wrap: wrap; }
 .footer-links a { font-size: var(--text-xs); color: var(--am-faint); letter-spacing: 0.08em; transition: color var(--transition); }
 .footer-links a:hover { color: var(--am-fg); }
@@ -705,19 +792,19 @@ footer {
 /* ============================================================  MISC */
 .tag-pill {
   display: inline-flex; align-items: center; padding: 4px 12px; border-radius: var(--r-full);
-  border: 1px solid rgba(246,246,253,0.15); background: rgba(246,246,253,0.05);
-  font-size: var(--text-xs); color: rgba(246,246,253,0.6);
+  border: 1px solid rgba(246,248,248,0.15); background: rgba(246,248,248,0.05);
+  font-size: var(--text-xs); color: rgba(246,248,248,0.6);
 }
 </style>
 </head>
 <body>
 
 <!-- SKIP LINK -->
-<a href="#main" class="sr-only">Skip to content</a>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <!-- LOADING SCREEN -->
 <div id="loader" role="status" aria-live="polite">
-  <div class="loader-watermark">ANTIMATTER AI</div>
+  <div class="loader-watermark">ATOM</div>
   <div class="loader-panel">
     <div class="loader-count" id="loaderCount">0<span style="font-size:0.5em">%</span></div>
     <div class="loader-label">Loading...</div>
@@ -727,18 +814,18 @@ footer {
 
 <!-- NAVIGATION -->
 <nav class="nav" id="navbar" role="navigation" aria-label="Main navigation">
-  <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer" class="nav-logo" aria-label="Antimatter AI home">
-    <svg aria-label="Antimatter AI logo mark" viewBox="0 0 36 36" fill="none">
-      <circle cx="18" cy="18" r="17" stroke="rgba(105,106,172,0.5)" stroke-width="1"/>
-      <ellipse cx="18" cy="18" rx="8" ry="17" stroke="rgba(162,163,233,0.6)" stroke-width="1" transform="rotate(35 18 18)"/>
-      <ellipse cx="18" cy="18" rx="8" ry="17" stroke="rgba(105,106,172,0.4)" stroke-width="1" transform="rotate(-35 18 18)"/>
-      <circle cx="18" cy="18" r="3" fill="#696aac"/>
-      <circle cx="18" cy="18" r="3" fill="#696aac" filter="url(#glow)"/>
-      <defs>
-        <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
+  <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer" class="nav-logo" aria-label="ATOM — a Nirmata Holdings company">
+    <svg class="atom-mark" viewBox="0 0 48 48" fill="none" role="img" aria-label="ATOM orbital mark">
+      <title>ATOM orbital mark</title>
+      <g class="atom-orbits" stroke="#8b9699" stroke-width="1.6" opacity="0.85" fill="none">
+        <ellipse cx="24" cy="24" rx="19" ry="8"/>
+        <ellipse cx="24" cy="24" rx="19" ry="8" transform="rotate(60 24 24)"/>
+        <ellipse cx="24" cy="24" rx="19" ry="8" transform="rotate(120 24 24)"/>
+      </g>
+      <circle class="atom-nucleus" cx="24" cy="24" r="4.4" fill="#00f0df"/>
+      <g class="atom-electron"><circle cx="43" cy="24" r="2.6" fill="#00f0df"/></g>
     </svg>
-    <span class="nav-logo-text">ANTIMATTER <span class="nav-logo-x">×</span> KSE</span>
+    <span class="nav-logo-text">ATOM <span class="nav-logo-x">×</span> KSE</span>
   </a>
   <nav class="nav-links" aria-label="Page sections">
     <a href="#ignite">Ignite</a>
@@ -799,7 +886,7 @@ footer {
       </a>
       <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer" class="btn-inverted">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Antimatter AI Platform
+        ATOM Platform
       </a>
     </div>
 
@@ -926,15 +1013,15 @@ footer {
           <p>ATOM deploys a persistent AI agent that knows each fan by seat, history, and behavior — delivering personalized game-day itineraries before tip-off, real-time upsell moments during the game, and automated post-event retention sequences.</p>
           <div class="tab-features">
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
               <div><div class="tab-feature-title">Personalized Itineraries</div><div class="tab-feature-desc">Pre-game AI briefings tailored to seat location, past purchases, and live traffic data</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
               <div><div class="tab-feature-title">In-Venue Upsell</div><div class="tab-feature-desc">Real-time seat upgrade pushes triggered by inventory availability and fan propensity scores</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
               <div><div class="tab-feature-title">Post-Event Retention</div><div class="tab-feature-desc">Automated win/loss sentiment-aware follow-up sequences with next-game incentives</div></div>
             </div>
           </div>
@@ -974,15 +1061,15 @@ footer {
           <p>ATOM continuously monitors ticket velocity, no-show patterns, and F&B purchase clustering to fire dynamic bundle offers at precisely the right moment — converting soft demand into hard revenue before gates open.</p>
           <div class="tab-features">
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
               <div><div class="tab-feature-title">Dynamic Bundle Engine</div><div class="tab-feature-desc">Real-time pricing and packaging logic that responds to demand signals from Ignite telemetry</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
               <div><div class="tab-feature-title">No-Show Prediction</div><div class="tab-feature-desc">ML model predicting no-shows 3 hours pre-game to enable strategic waitlist activation</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM9 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM9 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></div>
               <div><div class="tab-feature-title">F&B Intelligence</div><div class="tab-feature-desc">Predictive restocking and menu optimization across all Ball Arena concession nodes</div></div>
             </div>
           </div>
@@ -1020,15 +1107,15 @@ footer {
           <p>ATOM transforms raw sponsor exposure data into verified impression counts, auto-generates AI-written campaign recap decks, and detects loyalty activation opportunities in real time.</p>
           <div class="tab-features">
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg></div>
               <div><div class="tab-feature-title">Impression Tracking</div><div class="tab-feature-desc">Computer vision + dwell time analysis validating sponsor ROI across every in-venue placement</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
               <div><div class="tab-feature-title">AI-Written Recap Decks</div><div class="tab-feature-desc">ATOM auto-generates post-game sponsor performance decks in minutes, not days</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
               <div><div class="tab-feature-title">Loyalty Activation</div><div class="tab-feature-desc">Sponsor-branded fan loyalty rewards triggered at peak engagement moments during games</div></div>
             </div>
           </div>
@@ -1066,15 +1153,15 @@ footer {
           <p>ATOM generates game-day operational briefings for venue management, learns cross-property patterns across all four KSE teams, and automates membership retention risk scoring.</p>
           <div class="tab-features">
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
               <div><div class="tab-feature-title">Game-Day Briefings</div><div class="tab-feature-desc">ATOM auto-compiles pre-game ops intelligence — staff allocation, crowd flow, security flags</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
               <div><div class="tab-feature-title">Cross-Property Learning</div><div class="tab-feature-desc">Models trained on all 4 KSE venues share intelligence — what works at Pepsi Center applies to DGB Park</div></div>
             </div>
             <div class="tab-feature">
-              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(162,163,233,0.8)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+              <div class="tab-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(92,247,236,0.8)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
               <div><div class="tab-feature-title">Membership Retention</div><div class="tab-feature-desc">Churn risk scoring on season ticket holders with AI-driven intervention workflows</div></div>
             </div>
           </div>
@@ -1188,7 +1275,7 @@ footer {
   <div class="reveal">
     <div class="section-eyebrow">ATOM Platform Capabilities</div>
     <h2 class="section-title" id="solutions-heading">6 WAYS ATOM<br><span class="accent">POWERS THE STACK</span></h2>
-    <p class="section-body">Every capability links directly to the Antimatter AI platform — enterprise-grade, edge-deployed, and natively integrated with Ignite's data architecture.</p>
+    <p class="section-body">Every capability links directly to the ATOM platform — enterprise-grade, edge-deployed, and natively integrated with Ignite's data architecture.</p>
   </div>
 
   <div class="solutions-grid">
@@ -1198,7 +1285,7 @@ footer {
       <h3 class="solution-title">ATOM Enterprise AI</h3>
       <p class="solution-desc">The full-stack agentic intelligence platform. Deploys autonomous AI agents that observe, decide, and act across your entire fan and revenue data layer — without human bottlenecks.</p>
       <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer" class="solution-link">
-        antimatterai.com
+        Explore ATOM
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </article>
@@ -1281,11 +1368,11 @@ footer {
         Book a Demo
       </a>
       <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer" class="btn-inverted" style="font-size:var(--text-base);padding:15px 48px;">
-        Visit Antimatter AI →
+        Visit ATOM →
       </a>
     </div>
     <div class="cta-email reveal reveal-delay-4">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2-2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       atom@antimatterai.com · Based in Atlanta, GA · Serving clients globally
     </div>
   </div>
@@ -1297,14 +1384,17 @@ footer {
 <footer role="contentinfo">
   <div class="footer-horizon" aria-hidden="true"></div>
   <div class="footer-inner">
-    <div class="footer-brand">ANTIMATTER <span>AI</span></div>
+    <div class="footer-brandblock">
+      <div class="footer-brand">ATOM <span>×</span> KSE</div>
+      <div class="footer-endorsement">ATOM, a Nirmata Holdings company</div>
+    </div>
     <nav class="footer-links" aria-label="Footer navigation">
       <a href="https://www.antimatterai.com" target="_blank" rel="noopener noreferrer">Platform</a>
       <a href="https://www.antimatterai.com/enterprise-ai" target="_blank" rel="noopener noreferrer">Enterprise</a>
       <a href="mailto:atom@antimatterai.com">Contact</a>
     </nav>
     <div class="footer-copy">
-      © 2026 Antimatter AI — All rights reserved. ATOM × Ignite × KSE Partnership Overview.
+      © 2026 ATOM, a Nirmata Holdings company — All rights reserved. ATOM × Ignite × KSE Partnership Overview.
     </div>
   </div>
 </footer>
