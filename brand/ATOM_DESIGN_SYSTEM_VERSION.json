@@ -1,0 +1,24 @@
+{
+  "designSystem": "ATOM + Nirmata Holdings Brand Design Standard",
+  "upstreamVersion": "2.2.2",
+  "upstreamCommit": "4dc80b9a4eaaa3125748cb0c261e4fc49419c05a",
+  "upstreamCommitShort": "4dc80b9",
+  "upstreamRepoKind": "next.js (private) — ATOM-Nirmata-Holdings-Brand-Design-Standard",
+  "adoptedInto": "ATOM-KSE-Ignite (single-file static index.html, Vercel-connected)",
+  "adoptionState": "pilot",
+  "adoptionMethod": "inlined-tokens",
+  "adoptionMethodNote": "This app is a single static index.html deployed by Vercel with no build step. The canonical CSS custom properties (teal ladder, near-black surface stack, type scale, motion, window-chrome tokens) are inlined into the <style> block of index.html rather than imported, to preserve the zero-build static deploy. Legacy --am-* component variables are aliased onto the canonical tokens so existing component rules inherit the canonical palette.",
+  "canonicalTeal": "#00f0df",
+  "productAccents": {
+    "governance": "Shared ATOM identity (orbital logo, nucleus, traveling electron, loader, focus ring, live signals) always stays canonical teal #00F0DF. Product/data channels below are used with restraint for KSE sports-data and agent-outcome moments only — one accent per surface.",
+    "channels": {
+      "gold": "#f5c842",
+      "success": "#3fd18b"
+    }
+  },
+  "syncMethod": "Inlined, not imported. To update: re-read the canonical tokens from src/app/globals.css and public/tokens.json at the new upstream commit, update the :root token block and the legacy --am-* aliases in index.html, bump upstreamVersion/upstreamCommit here, then re-run `npm run check:brand` and `npm run test`.",
+  "rollback": "git revert the adoption commit, or restore index.html from the pre-adoption commit 9ec4cf1. No data migration, no dependency, and no deploy-config change is involved, so rollback is a single-file revert. See docs/ATOM-DESIGN-SYSTEM-ADOPTION.md.",
+  "driftGuard": "scripts/check-brand.mjs — dependency-free node script asserting a single canonical --teal-core source of truth and zero teal-impostor hexes.",
+  "tests": "scripts/test-brand.mjs — dependency-free node assertions for tokens, fonts, orbital mark, endorsement, window chrome, preserved KSE routes/content, and accessibility landmarks.",
+  "notes": "See docs/ATOM-DESIGN-SYSTEM-ADOPTION.md for the full adoption record, exceptions, and rollback plan. Pilot reference: BenThingkTangk/atom-sales-os#2."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "atom-kse-ignite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ATOM × Ignite × KSE partnership overview — canonical ATOM + Nirmata Holdings design system v2.2.2. Zero-build single-file static site.",
+  "scripts": {
+    "check:brand": "node scripts/check-brand.mjs",
+    "test": "node scripts/test-brand.mjs",
+    "validate": "node scripts/check-brand.mjs && node scripts/test-brand.mjs"
+  },
+  "comment": "Intentionally NO build script: this is a single static index.html deployed by Vercel with zero build. Adding a build script would change Vercel's deploy behavior. Scripts here are dependency-free governance/QA guards only.",
+  "license": "UNLICENSED"
+}
